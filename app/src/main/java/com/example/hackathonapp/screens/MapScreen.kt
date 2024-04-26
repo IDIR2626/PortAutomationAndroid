@@ -78,8 +78,7 @@ fun MapScreen(navController: NavHostController) {
             }
             Column(
                 modifier = Modifier.padding(
-                    top = 20.dp,
-                    start = 20.dp
+                    start = 12.dp
                 ),
 
                 ) {
@@ -87,14 +86,14 @@ fun MapScreen(navController: NavHostController) {
                     text = "Navire",
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
-                    fontSize = 46.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Spots Map",
                     color = Color.White,
-                    fontSize = 50.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )

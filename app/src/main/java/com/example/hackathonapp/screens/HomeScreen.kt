@@ -221,6 +221,6 @@ fun PortStatus() {
 //@Preview
 //@Composable
 //private fun HomeScreenPrev() {
-//    HomeScreen(navController)
+//    HomeScreen(navController())
 //}
 

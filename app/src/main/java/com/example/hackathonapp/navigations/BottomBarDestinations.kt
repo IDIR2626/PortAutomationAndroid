@@ -20,4 +20,9 @@ object Home: BottomBarDestinations {
     override val title = "Home"
 }
 
+object ExclamationTriangle: BottomBarDestinations {
+    override val route = "ExclamationTriangle"
+    override val icon = R.drawable.exclamation_triangle
+    override val title = "ExclamationTriangle"
+}
 

@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -35,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.hackathonapp.ViewModels.LoginVM
+import com.example.hackathonapp.navigations.ExclamationTriangle
 import com.example.hackathonapp.navigations.Home
 import com.example.hackathonapp.navigations.Map
 import com.example.hackathonapp.navigations.Navigation
@@ -58,44 +63,60 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(){
+fun MainScreen() {
 
     val navController = rememberNavController()
 
-    val destinationsList = listOf (Home, Map)
+    val destinationsList = listOf(Home, ExclamationTriangle, Map)
     var selectedIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
 
     Scaffold(
+
         bottomBar = {
 
             NavigationBar() {
-                destinationsList.forEachIndexed{index, screen ->
+                destinationsList.forEachIndexed { index, screen ->
+
+                    val contentColor =
+                        if (index == 1) { // Apply custom color for the second item
+                            Color(0xff002C70) // Use primary color for selected state
+                        } else {
+                            Color(0xffD9D9D9)
+                        }
+
                     NavigationBarItem(
                         icon = {
                             Icon(
                                 painter = painterResource(id = screen.icon),
-                                contentDescription = "icon")
+                                contentDescription = "icon",
+                                tint = contentColor as Color
+                            )
                         },
                         selected = selectedIndex == index,
                         onClick = {
                             selectedIndex = index
-                            navController.navigate(destinationsList[selectedIndex].route){
-                                popUpTo(Home.route)
-                                launchSingleTop = true
+                            if (selectedIndex == 1) {
+
+                            } else {
+                                navController.navigate(destinationsList[selectedIndex].route) {
+                                    popUpTo(Home.route)
+
+                                }
                             }
-                        })
+                        },
+                    )
                 }
             }
-        }
+        },
     ) {
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-        ){
+        ) {
             Navigation(navController = navController)
         }
     }
