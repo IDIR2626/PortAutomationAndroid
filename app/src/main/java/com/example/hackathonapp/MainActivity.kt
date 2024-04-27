@@ -19,31 +19,30 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.hackathonapp.ViewModels.LoginVM
-import com.example.hackathonapp.navigations.ExclamationTriangle
 import com.example.hackathonapp.navigations.Home
 import com.example.hackathonapp.navigations.Map
 import com.example.hackathonapp.navigations.Navigation
+import com.example.hackathonapp.screens.gettingstartedScreen
 import com.example.hackathonapp.ui.theme.HackathonAppTheme
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.accompanist.navigation.material.BottomSheetNavigator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,8 +52,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            HackathonAppTheme {
+                val c = LocalContext.current
+                // A surface container using the 'background' color from the theme
+               // MainScreen(this)
+                gettingstartedScreen(getVideoUri())
+
+            }
         }
+    }
+
+    private fun getVideoUri(): Uri {
+        val rawId = resources.getIdentifier("ships", "raw", packageName)
+        val videoUri = "android.resource://$packageName/$rawId"
+        return Uri.parse(videoUri)
     }
 }
 
@@ -64,10 +75,19 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+fun MainScreen(activity: Activity) {
+    val vm= hiltViewModel<LoginVM>()
+    val c= LocalContext.current
+    vm.login("meriem","123456"){
+        Log.d("login","login")
+    }
+    vm.test(activity)
+
 
     val navController = rememberNavController()
 
     val destinationsList = listOf(Home, ExclamationTriangle, Map)
+    val destinationsList = listOf(Home, Map)
     var selectedIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
@@ -78,18 +98,12 @@ fun MainScreen() {
 
             NavigationBar() {
                 destinationsList.forEachIndexed { index, screen ->
-
-                    val contentColor =
-                        if (index == 1) { // Apply custom color for the second item
-                            Color(0xff002C70) // Use primary color for selected state
-                        } else {
-                            Color(0xffD9D9D9)
-                        }
-
                     NavigationBarItem(
                         icon = {
                             Icon(
                                 painter = painterResource(id = screen.icon),
+                                contentDescription = "icon"
+                            )
                                 contentDescription = "icon",
                                 tint = contentColor as Color
                             )
@@ -110,6 +124,14 @@ fun MainScreen() {
                 }
             }
         },
+                            navController.navigate(destinationsList[selectedIndex].route) {
+                                popUpTo(Home.route)
+                                launchSingleTop = true
+                            }
+                        })
+                }
+            }
+        }
     ) {
 
         Box(
