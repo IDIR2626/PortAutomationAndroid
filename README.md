@@ -20,7 +20,7 @@ This project aims to develop an Android-based mobile application for automated m
 
 - Implement automated functionalities to release quays occupied by lower-priority ships upon arrival of passenger or petroleum vessels requiring immediate access to their reserved quays.
 
-**Technology Stack:**
+##Screenshots
 
 - Android Studio
 - Jetpack Compose 
@@ -29,6 +29,7 @@ This project aims to develop an Android-based mobile application for automated m
 **Screenshots**
 
   ![Main Window](https://github.com/IDIR2626/HackathonApp/blob/main/app/src/main/res/drawable/screenshot1.png)
+  ![Main Window](https://github.com/IDIR2626/HackathonApp/blob/main/app/src/main/res/drawable/screenshot2.png)
 
 **Installation:**
 
