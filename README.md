@@ -34,4 +34,4 @@ This project aims to develop an Android-based mobile application for automated m
 1. Clone the repository:
 
 ```bash
-git clone [https://github.com/your-username/PortAutomationAndroid.git](https://github.com/your-username/PortAutomationAndroid.git)
+git clone [https://github.com/IDIR2626/HackathonApp.git)
