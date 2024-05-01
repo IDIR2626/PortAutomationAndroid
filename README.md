@@ -28,6 +28,7 @@ This project aims to develop an Android-based mobile application for automated m
 - Firebase 
 **Screenshots**
 
+  ![Main Window](https://github.com/IDIR2626/HackathonApp/blob/main/app/src/main/res/drawable/screenshot1.png)
 
 **Installation:**
 
