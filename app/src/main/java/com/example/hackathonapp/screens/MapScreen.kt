@@ -1,20 +1,22 @@
 package com.example.hackathonapp.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,12 +27,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.hackathonapp.R
+import com.example.hackathonapp.ViewModels.MapVM
 import com.example.hackathonapp.items.InteractivePortMap
 import com.example.hackathonapp.model.Quay
 import com.example.hackathonapp.model.Ship
-
+import com.example.hackathonapp.navigations.Home
 
 @Composable
 fun MapScreen(navController: NavHostController) {
@@ -39,17 +44,13 @@ fun MapScreen(navController: NavHostController) {
         contentAlignment = Alignment.Center
     ) {
 
-
         Image(
             painter = painterResource(id = R.drawable.mapscreenbg),
             contentDescription = "background",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .matchParentSize()
-
         )
-
-
 
         Column(
             modifier = Modifier.padding(10.dp),
@@ -63,7 +64,9 @@ fun MapScreen(navController: NavHostController) {
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "background",
                     contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clickable { navController.navigate(Home.route) }
                 )
 
                 Spacer(Modifier.weight(1f))
@@ -78,7 +81,8 @@ fun MapScreen(navController: NavHostController) {
             }
             Column(
                 modifier = Modifier.padding(
-                    start = 12.dp
+                    top = 20.dp,
+                    start = 20.dp
                 ),
 
                 ) {
@@ -86,21 +90,36 @@ fun MapScreen(navController: NavHostController) {
                     text = "Navire",
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
-                    fontSize = 18.sp,
+                    fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Spots Map",
                     color = Color.White,
-                    fontSize = 22.sp,
+                    fontSize = 40.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
 
                 Box(modifier = Modifier){
+                    val vm = hiltViewModel<MapVM>()
+                    var list by remember {
+                        mutableStateOf(sampleShips)
+                    }
+                    var quay by remember {
+                        mutableStateOf(sampleQuays)
+                    }
+
                     Image(painter = painterResource(id = R.drawable.map_horizontal_devider), contentDescription = null,Modifier.fillMaxSize())
-                    InteractivePortMap(ships = sampleShips, quays = sampleQuays)
+                    InteractivePortMap(ships = list, quays = quay)
+                    /*vm.getALlShips {
+                        list=it
+                    }
+                    vm.getALlQuay {
+                        quay = it
+                    }*/
+
                 }
 
             }
@@ -132,17 +151,21 @@ val sampleQuays = listOf(
     Quay("Q3", true, null),
     Quay("Q4", true, null),
     Quay("Q3", false, null),
-    Quay("Q4", true, null),
+    Quay("Q4", false, null),
     Quay("Q3", true, null),
     Quay("Q4", true, null),
-    Quay("Q3", true, null),
-    Quay("Q4", true, null),
-    Quay("Q3", true, null),
+    Quay("Q3", false, null),
     Quay("Q4", true, null),
     Quay("Q3", true, null),
     Quay("Q4", false, null),
+    Quay("Q3", false, null),
+    Quay("Q4", true, null),
 
     )
 
+@Preview
+@Composable
+private fun MapScreenprev() {
 
+}
 

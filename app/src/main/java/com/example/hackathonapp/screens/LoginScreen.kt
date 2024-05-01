@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +23,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.hackathonapp.Domaine.Resource
 import com.example.hackathonapp.R
 import com.example.hackathonapp.ViewModels.LoginVM
 import com.example.hackathonapp.items.MyTextField
@@ -50,11 +54,14 @@ import com.example.hackathonapp.navigations.Home
 @Composable
 fun LoginScreen(navController: NavController) {
 
+    val scrollState = rememberScrollState()
+
+    val vm = hiltViewModel<LoginVM>()
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-
 
         Image(
             painter = painterResource(id = R.drawable.loginbg),
@@ -70,9 +77,10 @@ fun LoginScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(28.dp)
 
+
         ) {
             Spacer(
-                modifier = Modifier.fillMaxHeight (.3f),
+                modifier = Modifier.fillMaxHeight(.3f),
             )
 
             Text(
@@ -83,8 +91,7 @@ fun LoginScreen(navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-                ,
+                    .padding(horizontal = 10.dp),
                 textAlign = TextAlign.Start
             )
             Text(
@@ -95,16 +102,16 @@ fun LoginScreen(navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
-                ,
+                    .padding(10.dp),
                 textAlign = TextAlign.Start
             )
 
             Spacer(
-                modifier = Modifier.fillMaxHeight (.1f),
+                modifier = Modifier.fillMaxHeight(.1f),
             )
 
-            var text by rememberSaveable { mutableStateOf("") }
+            var shipName by remember { mutableStateOf("") }
+            var shipId by remember { mutableStateOf("") }
 
             SimpleTextField(
                 labelValue = "Enter Ship Name",
@@ -112,8 +119,10 @@ fun LoginScreen(navController: NavController) {
                     .padding(vertical = 10.dp)
                     .fillMaxWidth(0.9f)
                     .align(Alignment.CenterHorizontally),
-                KeyboardOptions(keyboardType = KeyboardType.Password),
+                KeyboardOptions(keyboardType = KeyboardType.Text),
                 onTextChanged = {
+                    shipName = it
+
                 },
                 true
             )
@@ -127,6 +136,7 @@ fun LoginScreen(navController: NavController) {
                     .align(Alignment.CenterHorizontally),
                 KeyboardOptions(keyboardType = KeyboardType.Password),
                 onTextChanged = {
+                    shipId = it
                 },
                 true
             )
@@ -138,7 +148,11 @@ fun LoginScreen(navController: NavController) {
                     .fillMaxWidth(0.9f)
                     .align(Alignment.CenterHorizontally),
                 onButtonClicked = {
-                     navController.navigate(Home.route)
+                    vm.login(shipName = shipName, id = shipId) {
+                        if (it is Resource.Success) {
+                            navController.navigate(Home.route)
+                        }
+                    }
                 },
                 isEnabled = true
 
